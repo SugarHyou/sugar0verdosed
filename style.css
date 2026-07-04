@@ -1,0 +1,269 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --white: white;
+    --red: red;
+    --rainbow-gradient: linear-gradient(90deg, red, orange, yellow, lime, cyan, blue, blueviolet);
+    --rainbow-gradient-border: linear-gradient(90deg, red, orange, yellow, lime, cyan, blue, blueviolet) 1;
+}
+
+@font-face {
+    font-family: 'Main';
+    src: url('/assets/fonts/W95F.otf');
+}
+
+body {
+    height: 100vh;
+    overflow: hidden;
+    background-image: url('/assets/graphics/backgrounds/default.png'); 
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Main';
+    color: blue;
+    gap: 15px;
+    padding: 10px;
+}
+
+/* --- STIMULATING TOP BAR --- */
+header {
+    background: var(--white);
+    border: 4px solid;
+    border-image: var(--rainbow-gradient-border);
+    padding: 5px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    word-break:keep-all;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 1.4rem;
+    text-shadow: 2px 2px #00ffff, -2px -2px #ff00ff;
+    animation: glitch 0.5s infinite alternate;
+}
+
+/* --- LAYOUT --- */
+.desktop {
+    display: flex;
+    gap: 15px;
+    flex: 1;
+}
+
+.window {
+    background: var(--white);
+    border: 4px solid;
+    border-image: var(--rainbow-gradient-border);
+    display: flex;
+    flex-direction: column;
+}
+
+.window-title {
+    background: var(--rainbow-gradient);
+    color: var(--white);
+    padding: 0 5px 5px;
+    font-weight: bold;
+    font-size: 1rem;
+    text-transform: uppercase;
+    text-shadow: 1px 1px blue;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.window-close {
+    background: #ff0055;
+    border: 2px solid white;
+    color: white;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.window-body {
+    padding: 10px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* --- FIXED WIDTH SIDE PANEL --- */
+.profile-side {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 300px; 
+}
+
+/* --- TALKING DIALOGUE STYLING --- */
+.avatar-container {
+    width: 100%;
+    height: 180px;
+    background: linear-gradient(45deg, #ff9999, #ffff99, #99ccff);
+    border: 3px solid #ff0055;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.avatar-container img {
+    width: 100%;
+    object-fit: contain;
+}
+
+.dialogue-text-box {
+    background: var(--red);
+    padding: 5px 10px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    color: var(--white);
+    word-break: break-word; 
+}
+
+.options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 5px;
+}
+
+.dialogue-choice {
+    background: #ffffcc;
+    border: 2px solid #ffcc00;
+    padding: 6px;
+    text-align: left;
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: blue;
+    cursor: pointer;
+    word-break: break-word;
+}
+.dialogue-choice:hover {
+    background: #00ff66;
+    color: white;
+    border-color: #0066ff;
+}
+
+/* MAIN COLUMN TAKES ALL REMAINING SPACE */
+.main-content {
+    flex: 1; 
+}
+
+/* --- BREAKCORE ELEMENTS --- */
+marquee {
+    background: #ffff00;
+    border: 2px solid #ff6600;
+    padding: 3px;
+    font-weight: bold;
+    color: #ff0055;
+}
+
+.bpm-counter {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #00ff66;
+    background: #4a0072; 
+    padding: 5px;
+    border-radius: 5px;
+    text-align: center;
+    text-shadow: 3px 3px #ff0055, -2px -2px #ffcc00;
+    animation: beat 0.32s infinite alternate; 
+}
+
+.status-bar {
+    margin-top: auto;
+    background: #ffffcc;
+    border: 3px solid #ffcc00;
+    padding: 8px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-around;
+}
+
+/* --- RGBYOP BUTTONS --- */
+.button-link {
+    display: inline-block;
+    margin: 5px 0;
+    padding: 5px 10px;
+    font-weight: bold;
+    text-decoration: none;
+    border: 2px solid;
+    border-image: linear-gradient(90deg, red, yellow, blue) 1;
+    background: #ffffff;
+}
+.button-link:hover {
+    background: #ffcc00;
+    color: white;
+}
+
+/* --- HIGH VELOCITY ANIMATIONS --- */
+@keyframes beat {
+    0% { transform: scale(0.92) rotate(-1deg); }
+    100% { transform: scale(1.08) rotate(1deg); }
+}
+
+@keyframes glitch {
+    0% { text-shadow: 2px 2px #ff0000; transform: skewX(-3deg); }
+    50% { text-shadow: -2px 2px #00ff00; }
+    100% { text-shadow: 2px -2px #0000ff; transform: skewX(3deg); }
+}
+
+::-webkit-scrollbar { width: 14px; }
+::-webkit-scrollbar-track { background: #ffffcc; }
+::-webkit-scrollbar-thumb { background: #ff0055; border: 2px solid #ffffcc; }
+
+/* Container holding all your stats horizontally right above the dialogue box */
+.status-container {
+    display: flex;
+    gap: 30px;
+    padding: 10px 10px 0;
+    background: rgba(255, 255, 255, 0.8);
+    border: 3px solid var(--deep-ink);
+    width: 100%;
+}
+
+/* Individual columns for Stress and Love */
+.meter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex: 1;
+}
+
+/* Labels styled exactly like the handwriting style in your drawing */
+.meter-label {
+    text-align: center;
+    font-weight: 900;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+}
+
+/* Outer hollow box from image_ad1be5.png */
+.pixel-bar-container {
+    width: 100%;
+    height: 24px;
+    background: #ffffff; /* White hollow background */
+    border: 3px solid blue; /* Sharp dark border instead of pure black */
+    position: relative;
+    padding: 1px; /* Slight gap to emphasize the fill box */
+}
+
+/* Inner blocky fill indicator */
+.pixel-bar-fill {
+    height: 100%;
+    transition: width 0.3s steps(4); /* Makes the bar chunk up visually when values change */
+}
