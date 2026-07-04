@@ -78,7 +78,7 @@
             const newPost = { date: formattedDate, title: title, content: content };
 
             try {
-                const url = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${FILE_PATH}`;
+                const url = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/${FILE_PATH}`;
                 let res = await fetch(url, { headers: { 'Authorization': `token ${GITHUB_TOKEN}` } });
 
                 let sha = ""; let currentPosts = [];
