@@ -8,55 +8,87 @@
     <style>
         .dash-container { max-width: 500px; margin: 40px auto; padding: 10px; }
         .input-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
-        label { font-weight: 900; color: var(--hot-pink); text-shadow: 1px 1px var(--deep-ink); }
-        input, textarea {
+        label { font-weight: 900; color: var(--hot-pink); text-shadow: 1px 1px var(--deep-ink); font-size: 0.85rem; }
+        input[type="text"], textarea {
             width: 100%; padding: 12px; font-family: inherit; font-weight: bold;
-            border: 3px solid var(--deep-ink); background: #fff; color: var(--deep-ink);
+            border: 3px solid #000; background: #fff; color: #000;
         }
-        textarea { height: 160px; resize: vertical; }
+        textarea { height: 120px; resize: vertical; }
+        
+        /* Custom Retro Range Sliders */
+        .slider-wrap { display: flex; align-items: center; gap: 15px; background: #ffffcc; border: 2px solid #000; padding: 8px; }
+        .slider-wrap input { flex: 1; cursor: pointer; }
+        .slider-wrap span { font-weight: bold; min-width: 35px; text-align: right; }
+
         #submit-btn {
-            width: 100%; background: var(--lime); color: var(--deep-ink); font-weight: 900;
-            border: 3px solid var(--deep-ink); padding: 12px; cursor: pointer; box-shadow: 4px 4px 0px var(--hot-pink);
+            width: 100%; background: lime; color: #000; font-weight: 900;
+            border: 3px solid #000; padding: 12px; cursor: pointer; box-shadow: 4px 4px 0px #ff0055;
         }
-        #submit-btn:disabled { background: var(--cyan); opacity: 0.6; }
+        #submit-btn:disabled { background: cyan; opacity: 0.6; }
     </style>
 </head>
-<body style="overflow: auto;">
+<body style="overflow: auto; background: #222;">
 
     <div class="window dash-container">
         <div class="window-title">
             <span>† Broadcast Console.exe †</span>
         </div>
         <div class="window-body">
+            
+            <!-- STATS CONFIGURATION METERS -->
+            <div style="border: 2px dashed #ff0055; padding: 10px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px;">
+                <div style="font-size: 0.8rem; font-weight: bold; color: #000; text-align: center;">⚡ PSYCHOLOGICAL LEVEL CALIBRATION ⚡</div>
+                
+                <div class="input-group" style="margin-bottom: 0;">
+                    <label style="color: red;">STRESS LEVEL</label>
+                    <div class="slider-wrap">
+                        <input type="range" id="stat-stress" min="0" max="100" value="20" oninput="document.getElementById('val-stress').innerText = this.value + '%'">
+                        <span id="val-stress">20%</span>
+                    </div>
+                </div>
+
+                <div class="input-group" style="margin-bottom: 0;">
+                    <label style="color: #ff0055;">AFFECTION VECTOR</label>
+                    <div class="slider-wrap">
+                        <input type="range" id="stat-affection" min="0" max="100" value="50" oninput="document.getElementById('val-affection').innerText = this.value + '%'">
+                        <span id="val-affection">50%</span>
+                    </div>
+                </div>
+
+                <div class="input-group" style="margin-bottom: 0;">
+                    <label style="color: #9900ff;">MENTAL DARKNESS DEVIATION</label>
+                    <div class="slider-wrap">
+                        <input type="range" id="stat-darkness" min="0" max="100" value="10" oninput="document.getElementById('val-darkness').innerText = this.value + '%'">
+                        <span id="val-darkness">10%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BLOG WRITER CONTENTS -->
             <div class="input-group">
-                <label for="title">BROADCAST TITLE</label>
+                <label for="title" style="color: #0066ff;">BROADCAST TITLE</label>
                 <input type="text" id="title" placeholder="(Leave blank for rapid thoughts...)">
             </div>
 
             <div class="input-group">
-                <label for="content">WHAT'S CORRUPTING YOUR MIND?</label>
+                <label for="content" style="color: #00ff66;">WHAT'S CORRUPTING YOUR MIND?</label>
                 <textarea id="content" placeholder="Type quick shit here..."></textarea>
             </div>
 
-            <button id="submit-btn" onclick="publishPost()">TRANSMIT TO FEED</button>
+            <button id="submit-btn" onclick="publishPost()">TRANSMIT TO FEED &amp; METERS</button>
         </div>
     </div>
 
     <script>
-        // 🌟 POINTED STRAIGHT TO YOUR BRAND NEW REPO!
         const GITHUB_USERNAME = 'SugarHyou';
-        const REPO_NAME = 'x-sugaroverdose-x';
+        const REPO_NAME = 'sugaroverdosed';
         const FILE_PATH = 'output/journal.json';
 
         let GITHUB_TOKEN = localStorage.getItem('overdose_journal_token');
 
         if (!GITHUB_TOKEN) {
-            GITHUB_TOKEN = prompt("† SYSTEM ACCESS REQUIRED † Please insert your activation key (Token):");
-            if (GITHUB_TOKEN) {
-                localStorage.setItem('overdose_journal_token', GITHUB_TOKEN.trim());
-            } else {
-                alert("Console Locked.");
-            }
+            GITHUB_TOKEN = prompt("† SYSTEM ACCESS REQUIRED † Please insert your activation key:");
+            if (GITHUB_TOKEN) localStorage.setItem('overdose_journal_token', GITHUB_TOKEN.trim());
         }
 
         async function publishPost() {
@@ -64,10 +96,15 @@
             const title = document.getElementById('title').value;
             const content = document.getElementById('content').value;
 
-            if (!GITHUB_TOKEN) return alert("Key missing! Refresh to enter it.");
+            // Gather Slider State Numbers
+            const targetStress = parseInt(document.getElementById('stat-stress').value);
+            const targetAffection = parseInt(document.getElementById('stat-affection').value);
+            const targetDarkness = parseInt(document.getElementById('stat-darkness').value);
+
+            if (!GITHUB_TOKEN) return alert("Key missing! Refresh to load console framework.");
             if (!content) return alert("Cannot transmit empty consciousness.");
 
-            btn.innerText = "TRANSMITTING... ⚡";
+            btn.innerText = "TRANSMITTING OVERRIDES... ⚡";
             btn.disabled = true;
 
             const now = new Date();
@@ -81,18 +118,25 @@
                 const url = `https://api.github.com/repos/${GITHUB_USERNAME}/${REPO_NAME}/contents/${FILE_PATH}`;
                 let res = await fetch(url, { headers: { 'Authorization': `token ${GITHUB_TOKEN}` } });
 
-                let sha = ""; let currentPosts = [];
+                let sha = ""; 
+                let dbStructure = { currentStats: { stress: 20, affection: 50, darkness: 10 }, posts: [] };
 
                 if (res.status === 200) {
                     const fileData = await res.json();
                     sha = fileData.sha;
-                    currentPosts = JSON.parse(decodeURIComponent(escape(atob(fileData.content.replace(/\n/g, '')))));
-                } else if (res.status === 401 || res.status === 403) {
-                    localStorage.removeItem('overdose_journal_token');
-                    return alert("Key rejected! Console reset. Refresh and try again.");
+                    const parsedRaw = JSON.parse(decodeURIComponent(escape(atob(fileData.content.replace(/\n/g, '')))));
+                    
+                    // Keep old layout backwards compatibility if transforming array layout
+                    if (Array.isArray(parsedRaw)) {
+                        dbStructure.posts = parsedRaw;
+                    } else {
+                        dbStructure = parsedRaw;
+                    }
                 }
 
-                currentPosts.unshift(newPost);
+                // Inject newly set state updates
+                dbStructure.currentStats = { stress: targetStress, affection: targetAffection, darkness: targetDarkness };
+                dbStructure.posts.unshift(newPost);
 
                 let updateRes = await fetch(url, {
                     method: 'PUT',
@@ -101,24 +145,24 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        message: `✨ Overdose transmission: ${title || 'Quick update'}`,
-                        content: btoa(unescape(encodeURIComponent(JSON.stringify(currentPosts, null, 2)))),
+                        message: `📈 Stats Override & Post: ${title || 'Thought Sync'}`,
+                        content: btoa(unescape(encodeURIComponent(JSON.stringify(dbStructure, null, 2)))),
                         sha: sha
                     })
                 });
 
                 if (updateRes.status === 200 || updateRes.status === 201) {
-                    alert("TRANSMISSION SUCCESSFUL! 🎀");
+                    alert("OVERDOSE DATA CORE WRITTEN SUCCESSFULLY! 🎀");
                     document.getElementById('title').value = '';
                     document.getElementById('content').value = '';
                 } else {
                     const errData = await updateRes.json();
-                    alert(`Transmission Aborted: ${errData.message}`);
+                    alert(`Aborted: ${errData.message}`);
                 }
             } catch (error) {
-                alert(`Terminal Failure: ${error.message}`);
+                alert(`Terminal Error: ${error.message}`);
             } finally {
-                btn.innerText = "TRANSMIT TO FEED";
+                btn.innerText = "TRANSMIT TO FEED & METERS";
                 btn.disabled = false;
             }
         }

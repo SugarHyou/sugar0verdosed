@@ -4,53 +4,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>X-SugarOverdose-X</title>
+    <title>SugarOverdosed</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <header style="gap: 15px;">
-        <div class="logo">X-SugarOverdose-X</div>
-        <div style="width: 75%;">
-            <marquee scrollamount="8">🌈 NEW SITE UUPPP!!! 🌈</marquee>
-        </div>
-        <div style="font-size: 0.9rem; font-weight: bold; color: lime; word-break: keep-all;">[ ONLINE ]</div>
-    </header>
-
     <div class="desktop">
 
         <div class="profile-side">
-            <div class="window" style="flex: 1.5;">
+            <div class="window" style="min-height: 400px;">
                 <div class="window-title">
                     <span>Chat</span>
                     <div class="window-close">X</div>
                 </div>
 
-
-                <div class="status-container">
-                    <!-- STRESS METER GROUP -->
-                    <div class="meter-group">
-                        <div class="meter-label" style="color: var(--hot-pink);">STRESS</div>
-                        <div class="pixel-bar-container">
-                            <!-- ADJUST THE WIDTH HERE TO FILL THE BAR -->
-                            <div class="pixel-bar-fill" style="width: 75%; background: var(--hot-pink);"></div>
-                        </div>
-                    </div>
-
-                    <!-- LOVE / AFFECTION METER GROUP -->
-                    <div class="meter-group">
-                        <div class="meter-label" style="color: var(--cyan);">LOVE</div>
-                        <div class="pixel-bar-container">
-                            <!-- ADJUST THE WIDTH HERE TO FILL THE BAR -->
-                            <div class="pixel-bar-fill" style="width: 100%; background: var(--lime);"></div>
-                        </div>
-                    </div>
-                </div>
                 <div class="window-body" style="display: flex; flex-direction: column;">
 
+                    <div style="padding: 0 0 7px; display: flex; flex-direction: column; gap: 6px; font-size: 0.75rem; font-weight: bold;">
+            <!-- Stress Meter -->
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                <span style="color: red; width: 65px; flex-shrink: 0;">STRESS:</span>
+                <div style="flex: 1; height: 12px; background: #eee; border: 1px solid #000; position: relative;">
+                    <div id="meter-stress" style="height: 100%; background: linear-gradient(90deg, #ff6666, red); width: 0%;"></div>
+                </div>
+                <span id="txt-stress" style="width: 30px; text-align: right;">0%</span>
+            </div>
+            <!-- Affection Meter -->
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                <span style="color: hotpink; width: 65px; flex-shrink: 0;">AFFECTION:</span>
+                <div style="flex: 1; height: 12px; background: #eee; border: 1px solid #000; position: relative;">
+                    <div id="meter-affection" style="height: 100%; background: linear-gradient(90deg, #ff99bb, #ff0055); width: 0%;"></div>
+                </div>
+                <span id="txt-affection" style="width: 30px; text-align: right;">0%</span>
+            </div>
+            <!-- Mental Darkness Meter -->
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                <span style="color: #9900ff; width: 65px; flex-shrink: 0;">DARKNESS:</span>
+                <div style="flex: 1; height: 12px; background: #eee; border: 1px solid #000; position: relative;">
+                    <div id="meter-darkness" style="height: 100%; background: linear-gradient(90deg, #b366ff, #4a0072); width: 0%;"></div>
+                </div>
+                <span id="txt-darkness" style="width: 30px; text-align: right;">0%</span>
+            </div>
+        </div>
+
                     <div class="avatar-container">
-                        <img id="sugar-avatar" src="/assets/art/Andy-(Jul-3-2026).png" alt="[SUGAR-CHAN GRAPHIC]">
+                        <img id="sugar-avatar" src="/assets/art/Sugar-(Jul-3-2026).png" alt="[SUGAR-CHAN GRAPHIC]">
                     </div>
 
                     <div class="dialogue-text-box" id="dialogue-box">
@@ -62,45 +61,44 @@
                 </div>
             </div>
 
-            <div class="window" style="flex: 1;">
-    <div class="window-title">
-        <span>BLOGS</span>
-        <div class="window-close">X</div>
-    </div>
-    <!-- 🌟 Add the id container here -->
-    <div class="window-body" id="latest-post-content">
-        Loading latest broadcast...
-    </div>
-</div>
+            <div class="window">
+                <div class="window-title">
+                    <span>BLOG</span>
+                    <div class="window-close">X</div>
+                </div>
+                <!-- 🌟 Add the id container here -->
+                <div class="window-body" id="latest-post-content">
+                    Loading latest broadcast...
+                </div>
+            </div>
         </div>
 
+        <!-- --- MAXIMALIST MAIN OS DASHBOARD --- -->
         <div class="window main-content">
             <div class="window-title">
-                <span>🌈 neon_delusion.sys</span>
+                <span>🌈 desktop_manifest.exe</span>
                 <div class="window-close">X</div>
             </div>
-            <div class="window-body" style="display: flex; flex-direction: column; gap: 15px;">
 
-                <h2 style="color: #ff0055; text-align: center; font-size: 1.6rem; text-shadow: 2px 2px #ffcc00;">🌈
-                    WELCOME TO THE RAINBOW VOID!!! 🌈</h2>
+            <!-- This container holds everything side-by-side -->
+            <div class="window-body">
+                <header style="gap: 15px;">
+                    <div class="logo">SugarOverdosed</div>
+                    <div>
+                        <marquee scrollamount="8">🌈 NEW SITE UUPPP!!! 🌈</marquee>
+                    </div>
+                    <div style="color: lime;">[ ONLINE ]
+                    </div>
+                </header>
 
-                <p>You wanted more colors? You got it. No black, no dark, no chill. Just pure eye-bleeding Red, Green,
-                    Blue, Yellow, Orange, and Purple flashing at the speed of a chopped-up 4-ply Amen break loop. >:3CCC
-                </p>
-
-                <hr style="border: 2px dashed #ff3399;">
-
-                <h3 style="color: #0066ff; text-shadow: 1px 1px #ffcc00;">★ NAVIGATE MY MIND ★</h3>
-                <ul style="list-style-type: '⚡ '; padding-left: 20px;">
-                    <li><a href="#" class="button-link" style="color: #ff0000;">[ SHRINE ] - Worship the speed</a></li>
-                    <li><a href="#" class="button-link" style="color: #ffaa00;">[ GRAPHICS ] - Pixel vomit folder</a>
-                    </li>
-                    <li><a href="#" class="button-link" style="color: #9900ff;">[ AUDIO ] - Loud breakcore files</a>
-                    </li>
-                </ul>
             </div>
+
+
         </div>
 
+    <!-- RIGHT COLUMN: Floating Full Body Character Image -->
+    <img src="/assets/art/Sugar-4-(Jul-5-2026).png" alt="[Sugar Full Body]"
+        style="max-height: 100%; margin: 0 -100px; animation: floatCharacter 2.5s ease-in-out infinite;">
     </div>
 
     <script src="script.js"></script>
