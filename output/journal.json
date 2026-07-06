@@ -1,12 +1,24 @@
-[
-  {
-    "date": "Jul 5, 2026 - 12:05 AM",
-    "title": "ZZZ",
-    "content": "Got home from Universal. I'm sooo sleepy..."
+{
+  "currentStats": {
+    "stress": 70,
+    "affection": 23,
+    "darkness": 11
   },
-  {
-    "date": "Jul 4, 2026 - 01:24 PM",
-    "title": "test",
-    "content": "test"
-  }
-]
+  "posts": [
+    {
+      "date": "Jul 5, 2026 - 08:08 PM",
+      "title": "She's So Angry All the Time",
+      "content": "Doesn't it get tiring?? Geez."
+    },
+    {
+      "date": "Jul 5, 2026 - 12:05 AM",
+      "title": "ZZZ",
+      "content": "Got home from Universal. I'm sooo sleepy..."
+    },
+    {
+      "date": "Jul 4, 2026 - 01:24 PM",
+      "title": "test",
+      "content": "test"
+    }
+  ]
+}
