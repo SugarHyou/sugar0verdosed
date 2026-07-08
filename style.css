@@ -26,7 +26,6 @@ body {
     font-family: 'Main';
     color: blue;
     gap: 15px;
-    padding: 10px;
 }
 
 strong {
@@ -112,7 +111,7 @@ hr {
 }
 
 .window-body {
-    height: 100%;
+    max-height: 100%;
     background: lightcyan;
     gap: 10px;
     padding: 10px;
@@ -385,7 +384,6 @@ button:hover {
     padding: 4px;
     border-bottom: 1px dashed cyan;
     cursor: pointer;
-    font-weight: bold;
 }
 
 /* Loop rainbow colors sequentially */
@@ -450,7 +448,7 @@ button:hover {
 }
 
 #sidebar {
-    padding: 10px;
+    padding: 0 10px;
     width: 30%;
     gap: 10px;
 }
@@ -461,6 +459,10 @@ button:hover {
     text-align: center;
     font-size: 0.8rem;
     border: 2px inset cyan;
+}
+
+#player-track-menu {
+    flex-wrap: wrap;
 }
 
 #player-track-menu button {
@@ -517,14 +519,31 @@ blockquote {
     font-weight: bold;
 }
 
-.locked-box {
-    background-color: #555; /* Dark Grey */
-    color: #ccc;
-    border: 2px solid #888;
-    padding: 5px;
-    cursor: not-allowed;
-    border-style: dashed;
-    pointer-events: none;
-    margin-bottom: 5px; /* Adds space between buttons */
+@keyframes blogPop {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
 }
 
+.blog-update-anim {
+    animation: blogPop 0.6s ease-out forwards;
+}
+
+
+#calendarGrid div {
+    padding: 5px;
+    border: 1px solid #ddd;
+    text-align: center;
+    font-size: 0.7rem;
+    cursor: pointer;
+}
+
+#calendarGrid div.today {
+    background: red;
+    color: white;
+}
+
+#calendarGrid div.event-day {
+    background: hotpink;
+    color: white;
+    font-weight: bold;
+}

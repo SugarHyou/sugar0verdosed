@@ -1,284 +1,97 @@
 const IS_DEV_MODE = true;
+// At the top of script.js
+let sugarMode = 'default';
+// Declare these globally
+const avatarImg = document.getElementById("sugar-avatar");
+const dialogueBox = document.getElementById("dialogue-box");
+const optionsBox = document.getElementById("options-box");
 
-const dialogueTree = {
-    start: {
-        text: "Sugar is turned away, busy doing something at their desk. Try to get their attention!",
-        typingImage: "/assets/art/SUGARWIP.png",
-        gifImage: "/assets/art/SUGARWIP.png",
-        choices: []
-    },
-    startShock: {
-        text: "Huh... OH!! Someone is actually here?! Oh my God, hold on, don't look at me yet—",
-        typingImage: "/assets/art/SUGARWIP2.png",
-        gifImage: "/assets/art/SUGARWIP2.png",
-        choices: [
-            { text: "It's okay!", nextNode: "introHappy" },
-            { text: "Who are you?", nextNode: "introQues" },
-            { text: "Take your time.", nextNode: "introHappy" },
-            { text: "...", nextNode: "introQuiet" }
-        ]
-    },
-    introHappy: {
-        text: "Thank you, just... One sec... Okay! Hi! I'm Sugar! Welcome to my website! There's not much going on right now, but... Well, actually, hold on... OKAY! I just unlocked my 'About Me' text file so you have something to do. Check it out!",
-        typingImage: "/assets/art/",
-        gifImage: "/assets/art/",
-        choices: [
-            { text: "Nice to meet you!", nextNode: "mainMenu" }
-        ],
-        onLoad: () => {
-            localStorage.setItem('sugar_intro_done', 'true');
-        }
-    },
-    introQues: {
-        text: "One sec... Okay! Uh-I'm Sugar! I don't know how else to answer that question other than my name... Y'know what? I made something that could help. Here, there should be a new 'About Me' file on the site! Look through it so... You know. Your question will be answered there.",
-        typingImage: "/assets/art/",
-        gifImage: "/assets/art/",
-        choices: [
-            { text: "Thanks!", nextNode: "mainMenu" }
-        ],
-        onLoad: () => {
-            localStorage.setItem('sugar_intro_done', 'true');
-        }
-    },
-    introQuiet: { 
-        text: "... Um. Okay, I think I'm good now. Hi...? I'm Sugar. Are you not very talkative? It's kinda creepy to just stare... Well, that's okay! I can talk for the both of us. Wait, actually-I have something you might like! Click on the new 'About Me' icon that just showed up. It's just reading, no talking, promise! Just to get to know a bit about... Uh. I guess It's self explanatory.",
-        typingImage: "/assets/art/",
-        gifImage: "/assets/art/",
-        choices: [
-            { text: "Continue.", nextNode: "mainMenu" }
-        ],
-        onLoad: () => {
-            localStorage.setItem('sugar_intro_done', 'true');
-        }
-    },
-    mainMenu: {
-        text: "So, what's up?",
-        typingImage: "/assets/art/Sugar-(Jul-3-2026).png",
-        gifImage: "/assets/art/Sugar-2-(Jul-3-2026).gif",
-        choices: [
-        ]
-    },
-};
+function setSugarMode(mode) {
+    sugarMode = mode;
 
-let currentDialogueNode = 'start';
+    if (!avatarImg || !dialogueBox) return;
 
-function handleSugarClick() {
-    if (currentDialogueNode === 'start') {
-        playClick();
-        currentDialogueNode = 'startShock';
-        loadNode('startShock');
+    switch(sugarMode) {
+        case 'busy':
+            avatarImg.src = "/assets/art/SUGAR_BUSY.png"; // Update your paths
+            dialogueBox.innerText = "Sugar is busy right now...";
+            optionsBox.innerHTML = "";
+            break;
+        case 'gaming':
+            avatarImg.src = "/assets/art/SUGAR_GAMING.gif";
+            dialogueBox.innerText = "Sugar is busy playing video games.";
+            optionsBox.innerHTML = "";
+            break;
+        case 'blogging':
+            avatarImg.src = "/assets/art/SUGAR_BLOGGING.png";
+            dialogueBox.innerText = "Sugar is typing a new blog...";
+            optionsBox.innerHTML = "";
+            // Auto-revert to default after 5 seconds
+            setTimeout(() => setSugarMode('default'), 5000);
+            break;
+        default:
+            avatarImg.src = "/assets/art/Sugar-(Jul-3-2026).gif";
+            dialogueBox.innerText = "So, what's up?";
+            renderDefaultOptions();
+            break;
     }
 }
 
-let currentTypingTimer = null;
-
-function typeWriterEffect(text, index, element, callback) {
-    if (index < text.length) {
-        element.innerHTML += text.charAt(index);
-        currentTypingTimer = setTimeout(() => {
-            typeWriterEffect(text, index + 1, element, callback);
-        }, 25);
-    } else if (callback) {
-        callback();
-    }
-}
-
-function loadNode(nodeKey) {
-    currentDialogueNode = nodeKey;
-    if (!IS_DEV_MODE) {
-        const pstTimeStr = new Date().toLocaleString("en-US", { timeZone: "America/Los_Angeles", hour: "numeric", hour12: false });
-        const pstHour = parseInt(pstTimeStr, 10);
-        if (pstHour >= 21 || pstHour < 9) return;
-    }
-
-    const node = dialogueTree[nodeKey];
-    const textElement = document.getElementById("dialogue-box");
-    const optionsElement = document.getElementById("options-box");
-    const avatarImg = document.getElementById("sugar-avatar");
-
-    clearTimeout(currentTypingTimer);
-    textElement.innerHTML = "";
-    optionsElement.innerHTML = "";
-
-    if (avatarImg) avatarImg.src = node.typingImage;
-
-    if (node.onLoad) {
-        node.onLoad();
-    }
-
-    if (nodeKey === 'mainMenu') {
-        if (unlockedInteractions.username) {
-            node.choices.push({ text: "Where did your username come from?", nextNode: "loreUsername" });
-        }
-    }
-
-    typeWriterEffect(node.text, 0, textElement, () => {
-        if (avatarImg) avatarImg.src = node.gifImage;
-
-        node.choices.forEach(choice => {
-            const button = document.createElement("button");
-            button.className = "dialogue-choice";
-            button.innerText = `► ${choice.text}`;
-            button.onclick = () => loadNode(choice.nextNode);
-            optionsElement.appendChild(button);
-        });
-    });
-}
-
-const clickSound = new Audio('/assets/audio/ui/Default Beep.wav');
-const openSound = new Audio('/assets/audio/ui/Maximize.wav');
-
-function playClick() {
-    clickSound.currentTime = 0;
-    clickSound.play().catch(e => console.log("Click audio blocked"));
-}
-
-function playOpen() {
-    openSound.currentTime = 0;
-    openSound.play().catch(e => console.log("Open audio blocked"));
-}
-
-function updateMeters(stats) {
-    const defaultStats = { stress: 20, affection: 50 };
-    const current = stats || defaultStats;
-
-    const stressMeter = document.getElementById('meter-stress');
-    const affectionMeter = document.getElementById('meter-affection');
-
-    if (stressMeter) {
-        stressMeter.style.width = `${current.stress}%`;
-        document.getElementById('txt-stress').innerText = `${current.stress}%`;
-    }
-    if (affectionMeter) {
-        affectionMeter.style.width = `${current.affection}%`;
-        document.getElementById('txt-affection').innerText = `${current.affection}%`;
-    }
-}
-
-function restoreUnlockedApps() {
-    const possibleWindows = ['window-about', 'window-chat'];
-
-    possibleWindows.forEach(id => {
-        if (localStorage.getItem(`unlocked_${id}`) === 'true') {
-            addShortcutToDesktop(id);
-        }
+function renderDefaultOptions() {
+    const optionsBox = document.getElementById("options-box");
+    optionsBox.innerHTML = ""; // Clear existing
+    const choices = ["How are you?", "What's new?", "Goodbye!"];
+    
+    choices.forEach(text => {
+        const btn = document.createElement("button");
+        btn.className = "dialogue-choice";
+        btn.innerText = `► ${text}`;
+        btn.onclick = () => { dialogueBox.innerText = "Sugar just shrugs in response."; };
+        optionsBox.appendChild(btn);
     });
 }
 
 async function loadSiteData() {
     try {
         const res = await fetch('https://raw.githubusercontent.com/SugarHyou/sugaroverdosed/main/output/journal.json');
-        if (!res.ok) throw new Error("Could not download database core.");
         const data = await res.json();
+        
+        // Target specific inner elements
+        const dateContainer = document.getElementById('blog-date');
+        const contentContainer = document.getElementById('blog-body');
+        
+        if (contentContainer && data.posts && data.posts.length > 0) {
+            const latestPost = data.posts[0];
 
-        updateMeters(data.currentStats);
+            // Only update and animate if the content is new
+            if (contentContainer.innerText !== latestPost.content) {
+                // Apply animation class
+                contentContainer.classList.add('blog-update-anim');
+                
+                // Set the details
+                dateContainer.innerText = latestPost.date;
+                contentContainer.innerText = latestPost.content;
+                
+                // Cleanup animation class after it finishes so it can be re-triggered later
+                setTimeout(() => contentContainer.classList.remove('blog-update-anim'), 600);
+            }
 
-        const posts = data.posts || [];
-        const container = document.getElementById('latest-post-content');
-
-        if (container) {
-            if (posts.length > 0) {
-                const latest = posts[0];
-                container.innerHTML = `
-                    <article class="post-card" style="width: 100%; margin: 0;">
-                        <div class="post-header" style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                            <img src="/assets/art/Sugar-3-(Jul-4-2026).png" style="width: 40px; height: 40px; border: 1px solid red;" alt="PFP">
-                            <div class="post-meta" style="display: flex; flex-direction: column;">
-                                <span class="username" style="font-weight: 900; color: var(--hot-pink);">Sugar</span>
-                                <span class="date" style="font-size: 0.8rem; color: dodgerblue; opacity: 0.8;">${latest.date}</span>
-                            </div>
-                        </div>
-                        ${latest.title ? `<h3 class="post-title" style="margin: 5px 0;">${latest.title}</h3>` : ''}
-                        <div class="post-content" style="font-size: 0.95rem; line-height: 1.3;">
-                            <p style="margin: 0; white-space: pre-wrap;">${latest.content}</p>
-                        </div>
-                    </article>
-                `;
-            } else {
-                container.innerHTML = `
-                    <div style="text-align: center; color: hotpink; font-weight: bold; padding: 10px;">
-                        STATUS: WAITING FOR FIRST BROADCAST...
-                    </div>
-                `;
+            // Check for new post animation
+            const lastSeenPostDate = localStorage.getItem('last_seen_post_date');
+            if (lastSeenPostDate !== latestPost.date) {
+                triggerBlogAnimation();
+                localStorage.setItem('last_seen_post_date', latestPost.date);
             }
         }
     } catch (e) {
-        console.error("Failed executing synchronization matrix:", e);
-        const container = document.getElementById('latest-post-content');
-        if (container) {
-            container.innerHTML = `
-                <div style="text-align: center; color: red; font-weight: bold; padding: 10px;">
-                    ERROR SYNCING SYSTEM DATABASE CORE...
-                </div>
-            `;
-        }
-    }
-}
-
-function applySleepCycleSystem() {
-    const statusElement = document.getElementById('online-status');
-    const avatarImg = document.getElementById("sugar-avatar");
-    const dialogueBox = document.getElementById("dialogue-box");
-    const optionsBox = document.getElementById("options-box");
-    const blogWindow = document.getElementById('window-blog');
-    const fullBodyImg = document.getElementById('sugar-fullbody');
-
-    if (!statusElement) return;
-
-    let isSleeping = false;
-
-    if (!IS_DEV_MODE) {
-        const pstTimeStr = new Date().toLocaleString("en-US", { timeZone: "America/Los_Angeles", hour: "numeric", hour12: false });
-        const pstHour = parseInt(pstTimeStr, 10);
-        if (pstHour >= 21 || pstHour < 9) {
-            isSleeping = true;
-        }
-    }
-
-    if (isSleeping) {
-        statusElement.style.color = "red";
-        statusElement.style.animation = "none";
-        statusElement.innerText = "🔴 OFFLINE";
-
-        if (avatarImg) avatarImg.src = "/assets/art/Sugar-sleeping.png";
-        if (dialogueBox) dialogueBox.innerHTML = `Sugar is recharging their brain right now. Check back in the morning!`;
-        if (optionsBox) optionsBox.innerHTML = "";
-        if (blogWindow) blogWindow.style.display = "none";
-        if (fullBodyImg) fullBodyImg.style.visibility = "hidden";
-    } else {
-        statusElement.style.color = "lime";
-        statusElement.style.animation = "blinker 1.5s linear infinite";
-        statusElement.innerText = "🟢 ONLINE";
-
-        if (blogWindow) blogWindow.style.display = "block";
-        if (fullBodyImg) fullBodyImg.style.visibility = "visible";
+        console.error("Failed synchronization:", e);
     }
 }
 
 window.addEventListener('DOMContentLoaded', () => {
+    setSugarMode('default');
     loadSiteData();
-    applySleepCycleSystem();
-    restoreUnlockedApps();
     makeWindowsDraggable();
-
-    const hasSeenIntro = localStorage.getItem('sugar_intro_done') === 'true';
-
-    if (IS_DEV_MODE) {
-        if (!hasSeenIntro) {
-            loadNode('start');
-        } else {
-            loadNode('mainMenu');
-        }
-    } else {
-        const pstHour = new Date().toLocaleString("en-US", { timeZone: "America/Los_Angeles", hour: "numeric", hour12: false });
-        if (pstHour >= 9 && pstHour < 21) {
-            if (!hasSeenIntro) {
-                loadNode('start');
-            } else {
-                loadNode('mainMenu');
-            }
-        }
-    }
 });
 
 function playSong(trackName, audioSrc) {
@@ -396,33 +209,6 @@ window.addEventListener('DOMContentLoaded', () => {
     makeWindowsDraggable();
 });
 
-const unlockedApps = new Set();
-
-function unlockDesktopFile(windowId, iconEmoji, filenameText) {
-    if (unlockedApps.has(windowId)) return;
-
-    const desktopGrid = document.getElementById('desktop-grid');
-    if (!desktopGrid) return;
-
-    const shortcutElement = document.createElement('a');
-    shortcutElement.href = "javascript:void(0)";
-    shortcutElement.onclick = () => {
-        toggleWindow(windowId);
-        playOpen();
-    };
-    shortcutElement.style = "display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #000; text-align: center; animation: blinker 0.5s ease 3;";
-    shortcutElement.innerHTML = `
-        <span style="font-size: 2.2rem;">${iconEmoji}</span>
-        <span style="color: white; padding: 1px 4px; font-weight: bold;">${filenameText}</span>
-    `;
-
-    desktopGrid.appendChild(shortcutElement);
-    unlockedApps.add(windowId);
-    makeWindowsDraggable();
-
-    localStorage.setItem(`unlocked_${windowId}`, 'true');
-}
-
 function switchAboutTab(tabId) {
     const tabs = document.querySelectorAll('.about-tab-content');
     tabs.forEach(tab => tab.style.display = 'none');
@@ -441,46 +227,190 @@ function switchAboutTab(tabId) {
     clickedBtn.style.opacity = "1";
 }
 
-function addShortcutToDesktop(windowId) {
-    if (unlockedApps.has(windowId)) return;
+// Listen for changes from other tabs/pages
+window.addEventListener('storage', (event) => {
+    if (event.key === 'sugar_mode_request') {
+        const newMode = event.newValue;
+        if (newMode) {
+            setSugarMode(newMode);
+            console.log("Mode updated from dashboard: " + newMode);
+        }
+    }
+});
 
-    const desktopGrid = document.getElementById('desktop-grid');
-    if (!desktopGrid) return;
+// Also check the mode immediately when the page loads
+window.addEventListener('DOMContentLoaded', () => {
+    const savedMode = localStorage.getItem('sugar_mode_request') || 'default';
+    setSugarMode(savedMode);
+    
+    makeWindowsDraggable();
+    loadSiteData();
+});
 
-    const iconConfig = {
-        'window-chat': { emoji: '💬', text: 'chat.exe' }
-    };
+// Initialize the audio object globally
+const openSound = new Audio('/assets/audio/ui/Maximize.wav');
 
-    const config = iconConfig[windowId];
-    if (!config) return;
-
-    const shortcutElement = document.createElement('a');
-    shortcutElement.href = "javascript:void(0)";
-    shortcutElement.onclick = () => {
-        toggleWindow(windowId);
-        playOpen();
-    };
-    shortcutElement.classList.add('app', 'flex', 'column');
-    shortcutElement.innerHTML = `
-        <span class="app-icon">${config.emoji}</span>
-        <span class="app-name" style="background: orange; color: white;">${config.text}</span>
-    `;
-
-    desktopGrid.appendChild(shortcutElement);
-    unlockedApps.add(windowId);
+function playOpen() {
+    openSound.currentTime = 0;
+    openSound.play().catch(e => console.log("Open audio blocked by browser policy"));
 }
 
-// Tracks if the user has clicked these things
-const unlockedInteractions = JSON.parse(localStorage.getItem('unlocked_interactions')) || {
-    username: false,
-    art: false,
-    breakcore: false,
-    weather: false
+function handleSugarClick() {
+    // Determine what happens when the avatar is clicked
+    if (sugarMode === 'default') {
+        const dialogueBox = document.getElementById("dialogue-box");
+        dialogueBox.innerText = "Stop poking me!";
+        setTimeout(() => setSugarMode('default'), 2000);
+    }
+}
+
+function triggerBlogAnimation() {
+    const chatWin = document.getElementById('window-chat');
+    if (chatWin) {
+        chatWin.classList.remove('hidden');
+        // Set the mode to blogging
+        setSugarMode('blogging');
+        // Optional: Play a sound
+        playOpen(); 
+    }
+}
+
+async function updateUIStats() {
+    try {
+        const res = await fetch('https://raw.githubusercontent.com/SugarHyou/sugaroverdosed/main/output/journal.json');
+        const data = await res.json();
+
+        if (data.currentStats) {
+            const stats = data.currentStats;
+
+            // Update Stress
+            document.getElementById('meter-stress').style.width = stats.stress + '%';
+            document.getElementById('txt-stress').innerText = stats.stress + '%';
+
+            // Update Affection
+            document.getElementById('meter-affection').style.width = stats.affection + '%';
+            document.getElementById('txt-affection').innerText = stats.affection + '%';
+            
+            // Note: If you add darkness to the chat UI later, add it here too:
+            // document.getElementById('meter-darkness').style.width = stats.darkness + '%';
+        }
+    } catch (error) {
+        console.error("Failed to sync stats:", error);
+    }
+}
+
+// Run this when the page loads to ensure stats are current
+window.addEventListener('load', () => {
+    updateUIStats();
+});
+
+// --- CALENDAR ENGINE ---
+let date = new Date();
+
+
+// ==========================================
+// CALENDAR & HOLIDAYS SYSTEM (REMIXED)
+// ==========================================
+
+const characterEvents = {
+    "4-25": ["SugarHyou's Neocities Anniversary! ✨"],
+    "10-14": ["SugarHyou's Birthday! ✨"],
+    "2026-5-2": ["One4AllTeam Cosplay Meetup"],
+    "2026-5-15": ["Comic-Con Revolution Early Badge Pickup"],    
+    "2026-5-16": ["Comic-Con Revolution! ✨"],
+    "2026-5-17": ["Comic-Con Revolution! ✨"],
+    "2026-5-21": ["BN Appt"],
+    "2026-5-24": ["BKawaii Market x Kira Kira Gals! ✨"],
+    "2026-5-30": ["Anime Riverside ✨"],
+    "2026-5-31": ["Anime Riverside ✨"],
+    "2026-6-6": ["One4AllTeam "],
+    "2026-6-8": ["Photoshoot"],
+    "2026-6-19": ["The Nostalgia Con"],
+    "2026-6-20": ["Anime Night Mart", "Harajuku Day Swap Meet", "The Nostalgia Con", "Jade's Furry Friends 5K Run/Walk", "QCON", "Santa Ana Flea Market"],
+    "2026-6-21": ["The Nostalgia Con", "Anime Night Mart"],
+    "2026-6-22": ["STEP"],
+    "2026-6-23": ["STEP"],
+    "2026-6-24": ["STEP"],
+    "2026-6-25": ["STEP"],
+    "2026-6-26": ["Fan Expo Anaheim"],
+    "2026-6-27": ["Fan Expo Anaheim"],
+    "2026-6-28": ["Fan Expo Anaheim"],
+    "2026-6-29": ["STEP"],
+    "2026-6-30": ["STEP"],
+    "2026-7-1": ["STEP"],
+    "2026-7-2": ["Anime Expo! ✨", "STEP"],
+    "2026-7-3": ["Anime Expo! ✨"],
+    "2026-7-4": ["Harajuku Day Swap Meet", "Anime Expo"],
+    "2026-7-5": ["Anime Expo"],
+    "2026-7-11": ["Spirit of Japan Festival! ✨"],
+    "2026-7-12": ["Spirit of Japan Festival"],
+    "2026-8-15": ["Sonic Boost"],
+    "2026-8-16": ["Sonic Boost"],
+    "2026-9-5": ["Anime San Diego! ✨"],
+    "2026-9-6": ["Anime San Diego! ✨"],
 };
 
-function unlockInteraction(key) {
-    unlockedInteractions[key] = true;
-    localStorage.setItem('unlocked_interactions', JSON.stringify(unlockedInteractions));
-    playClick();
-    loadNode(currentDialogueNode);
+let fetchedHolidays = {};
+let loadedHolidayYear = null;
+let calDate = new Date(); // Renamed to avoid conflicts
+
+function fetchHolidays(year) {
+    const url = `https://date.nager.at/api/v3/PublicHolidays/${year}/US`;
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(holiday => {
+                const parts = holiday.date.split('-'); 
+                const key = `${parseInt(parts[0], 10)}-${parseInt(parts[1], 10)}-${parseInt(parts[2], 10)}`;
+                fetchedHolidays[key] = holiday.localName;
+            });
+            renderCalendar();
+        })
+        .catch(err => console.error("Error fetching holidays:", err));
 }
+
+function renderCalendar() {
+    const monthDisplay = document.getElementById('monthDisplay');
+    const grid = document.getElementById('calendarGrid');
+    if (!grid || !monthDisplay) return; 
+    
+    grid.innerHTML = "";
+    const year = calDate.getFullYear();
+    const month = calDate.getMonth();
+    const monthName = calDate.toLocaleString('default', { month: 'long' });
+    monthDisplay.innerText = `${monthName} ${year}`;
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const lastDate = new Date(year, month + 1, 0).getDate();
+    const today = new Date();
+
+    for (let i = 0; i < firstDay; i++) grid.appendChild(document.createElement('div'));
+
+    for (let i = 1; i <= lastDate; i++) {
+        const dayDiv = document.createElement('div');
+        dayDiv.innerText = i;
+        const absKey = `${year}-${month + 1}-${i}`;
+        const recKey = `${month + 1}-${i}`;
+
+        if (i === today.getDate() && month === today.getMonth() && year === today.getFullYear()) dayDiv.classList.add('today');
+
+        let dayEvents = [];
+        if (characterEvents[absKey]) dayEvents = dayEvents.concat(characterEvents[absKey]);
+        if (characterEvents[recKey]) dayEvents = dayEvents.concat(characterEvents[recKey]);
+        if (fetchedHolidays[absKey]) dayEvents.push(fetchedHolidays[absKey]);
+
+        if (dayEvents.length > 0) {
+            dayDiv.classList.add('event-day');
+            const combinedText = dayEvents.join('\n');
+            dayDiv.title = combinedText;
+            dayDiv.onclick = () => alert(`Events for today:\n\n${combinedText}`);
+        }
+        grid.appendChild(dayDiv);
+    }
+}
+
+document.getElementById('prevMonth').onclick = () => { calDate.setMonth(calDate.getMonth() - 1); renderCalendar(); };
+document.getElementById('nextMonth').onclick = () => { calDate.setMonth(calDate.getMonth() + 1); renderCalendar(); };
+
+// Initialize
+fetchHolidays(calDate.getFullYear());
