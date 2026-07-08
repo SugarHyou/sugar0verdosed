@@ -53,19 +53,33 @@ function renderDefaultOptions() {
 
 async function loadSiteData() {
     try {
-        const res = await fetch('https://api.github.com/repos/SugarHyou/sugaroverdosed/contents/output/journal.json');
-        const fileData = await res.json();
+        // Use the RAW URL. This returns your JSON file directly.
+        const res = await fetch('https://raw.githubusercontent.com/SugarHyou/sugaroverdosed/main/output/journal.json');
+        
+        // This will now parse your actual journal.json content
+        const data = await res.json();
+        
+        // Target specific inner elements
+        const dateContainer = document.getElementById('blog-date');
+        const contentContainer = document.getElementById('blog-body');
+        
+        if (contentContainer && data.posts && data.posts.length > 0) {
+            const latestPost = data.posts[0];
 
-        // 1. Clean the base64 string (remove newlines)
-        const base64Content = fileData.content.replace(/\n/g, '');
-        
-        // 2. Decode properly
-        const jsonString = decodeURIComponent(escape(atob(base64Content)));
-        
-        // 3. Parse
-        const data = JSON.parse(jsonString);
-        
-        // ... rest of your logic (updating DOM, etc)
+            if (contentContainer.innerText !== latestPost.content) {
+                contentContainer.classList.add('blog-update-anim');
+                dateContainer.innerText = latestPost.date;
+                contentContainer.innerText = latestPost.content;
+                
+                setTimeout(() => contentContainer.classList.remove('blog-update-anim'), 600);
+            }
+
+            const lastSeenPostDate = localStorage.getItem('last_seen_post_date');
+            if (lastSeenPostDate !== latestPost.date) {
+                triggerBlogAnimation();
+                localStorage.setItem('last_seen_post_date', latestPost.date);
+            }
+        }
     } catch (e) {
         console.error("Failed synchronization:", e);
     }
