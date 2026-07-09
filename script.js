@@ -18,7 +18,7 @@ function setSugarMode(mode) {
             optionsBox.innerHTML = "";
             break;
         case 'gaming':
-            avatarImg.src = "/assets/art/SUGAR_GAMING.gif";
+            avatarImg.src = "/assets/art/Sugar-5-(Jul-8-2026).gif";
             dialogueBox.innerText = "Sugar is busy playing video games.";
             optionsBox.innerHTML = "";
             break;
