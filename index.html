@@ -20,7 +20,7 @@
                 <div class="window-close">X</div>
             </div>
 
-            <div class="window-body flex column" style="overflow: hidden;">
+            <div class="window-body flex column" style="height: 100%; overflow: hidden;">
                 <marquee behavior="scroll" direction="left" scrollamount="4">Moving inline styles...</marquee>
                 <div class="flex" style="height: 100%; overflow: hidden;">
                     <div id="desktop-grid">
@@ -33,6 +33,12 @@
                             onclick="toggleWindow('window-calendar');playOpen();">
                             <span class="app-icon">📅</span>
                             <span class="app-name" style="background: orange;">calendar.exe</span>
+                        </a>
+
+                        <a href="javascript:void(0)" class="app flex column"
+                            onclick="toggleWindow('window-about');playOpen();">
+                            <span class="app-icon">👤</span>
+                            <span class="app-name" style="background: yellow;">about_me.txt</span>
                         </a>
                     </div>
                     <div id="sidebar" class="flex column">
@@ -88,7 +94,7 @@
                             <div class="playlist-track"
                                 onclick="playSong('ELECTRIC WEEKEND ZONE', '/assets/audio/music/ELECTRIC WEEKEND ZONE.mp3')">
                                 05. ELECTRIC WEEKEND ZONE</div>
-                                <div class="playlist-track"
+                            <div class="playlist-track"
                                 onclick="playSong('INTERNET ANGEL', '/assets/audio/music/INTERNET ANGEL.mp3')">
                                 06. INTERNET ANGEL</div>
                             <div class="playlist-track"
@@ -98,17 +104,7 @@
                                 onclick="playSong('Let\'s Go Gambling!', '/assets/audio/music/Let\'s Go Gambling!.mp3')">
                                 08. Let's Go Gambling!</div>
                         </div>
-                        <div class="window" style="height: 400px; display: flex; flex-direction: column;">
-                            <div class="window-title flex">
-                                <span>CBOX</span>
-                                <div class="window-close">X</div>
-                            </div>
-                            <!-- Add flex: 1 here to force it to fill the remaining space -->
-                            <div class="window-popup-content" style="padding: 0; flex: 1; display: flex;">
-                                <iframe src="https://www3.cbox.ws/box/?boxid=3557030&boxtag=bvUuGP"
-                                    style="width: 100%; height: 100%; border: none;"></iframe>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -171,6 +167,55 @@
             </div>
 
             <div id="calendarGrid" class="flex" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px;">
+            </div>
+        </div>
+    </div>
+
+    <div id="window-about" class="window window-popup hidden flex" style="width: 350px; border: 4px solid yellow;">
+        <div class="window-title flex" style="background: yellow;">
+            <span>ABOUT_ME.TXT</span>
+            <div class="window-close" onclick="toggleWindow('window-about')">X</div>
+        </div>
+        <div class="window-popup-content flex column" style="gap: 10px;">
+            <div class="flex" style="gap: 10px; align-items: center;">
+                <img src="/assets/art/Sugar-3-(Jul-4-2026).png"
+                    style="width: 80px; height: 80px; border: 2px solid yellow;">
+                <div class="flex column" style="gap: 10px;">
+                    <h2>Sugar0verdosed</h2>
+                    <div class="flex" style="gap: 10px; flex-wrap: wrap;">
+                        <span style="background: yellow; padding: 2px 5px;">Artist</span>
+                        <span style="background: yellow; padding: 2px 5px;">Clown</span>
+                        <span style="background: yellow; padding: 2px 5px;">Coder</span>
+                    </div>
+                </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px; font-size: 0.85rem;">
+                <div>
+                    <strong style="color: lime;">Likes:</strong>
+                    <p>
+                        <span class="has-tooltip">Cranberry juice
+                            <span class="tooltip-text">
+                                <img src="/assets/art/Sugar-7-(Jul-9-2026).gif" width="80">I could drink this thing
+                                'till I'm SLOSHING bro. Especially if it's CranMango I will fuck that shit UP.
+                            </span>
+                        </span>,
+                        <span class="has-tooltip">Cheese
+                            <span class="tooltip-text"><img src="/assets/art/Sugar-7B-(Jul-9-2026).gif" width="80">I'm
+                                literally a mouse. 🧀</span>
+                        </span>
+                    </p>
+                </div>
+                <div>
+                    <strong style="color: red;">Dislikes:</strong>
+                    <p>
+                        <span class="has-tooltip">Overly competitive people
+                            <span class="tooltip-text">
+                                <img src="/assets/art/Sugar-7C-(Jul-9-2026).gif" width="80">I feel like they're just not
+                                really having fun. At all. It stresses me out!
+                            </span>
+                        </span>, Winter, Soda
+                    </p>
+                </div>
             </div>
         </div>
     </div>

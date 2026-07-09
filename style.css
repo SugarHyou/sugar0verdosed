@@ -29,6 +29,10 @@ body {
     padding: 10px 0;
 }
 
+img {
+    image-rendering: pixelated;
+}
+
 strong {
     color: red;
 }
@@ -547,4 +551,34 @@ blockquote {
     background: hotpink;
     color: white;
     font-weight: bold;
+}
+
+/* Custom Tooltip Container */
+.has-tooltip {
+    position: relative;
+    cursor: help;
+    border-bottom: 2px dotted blue;
+}
+
+/* The actual tooltip box */
+.has-tooltip .tooltip-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    visibility: hidden;
+    width: 200px;
+    background-color: white;
+    text-align: center;
+    padding: 5px;
+    border: 2px solid blue;
+    position: absolute;
+    z-index: 999;
+    bottom: 125%; 
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.has-tooltip:hover .tooltip-text {
+    visibility: visible;
 }

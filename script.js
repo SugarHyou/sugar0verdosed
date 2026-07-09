@@ -53,11 +53,10 @@ function renderDefaultOptions() {
 
 async function loadSiteData() {
     try {
-        // Use the RAW URL. This returns your JSON file directly.
-        const res = await fetch('https://raw.githubusercontent.com/SugarHyou/sugaroverdosed/main/output/journal.json');
-        
-        // This will now parse your actual journal.json content
-        const data = await res.json();
+        const res = await fetch('https://raw.githubusercontent.com/SugarHyou/sugar0verdosed/main/output/journal.json', {
+    cache: 'no-store' // Tells the browser to always fetch from the server
+});
+const data = await res.json();
         
         // Target specific inner elements
         const dateContainer = document.getElementById('blog-date');
@@ -274,7 +273,7 @@ function triggerBlogAnimation() {
 
 async function updateUIStats() {
     try {
-        const res = await fetch('https://raw.githubusercontent.com/SugarHyou/sugaroverdosed/main/output/journal.json');
+        const res = await fetch('https://raw.githubusercontent.com/SugarHyou/sugar0verdosed/main/output/journal.json');
         const data = await res.json();
 
         if (data.currentStats) {
