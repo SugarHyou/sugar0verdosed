@@ -591,3 +591,37 @@ blockquote {
 .has-tooltip:hover .tooltip-text {
     visibility: visible;
 }
+
+@media (max-width: 768px) {
+    /* Stack your main desktop layout */
+    .desktop {
+        flex-direction: column;
+    }
+
+    /* Make the sidebar full width */
+    #sidebar {
+        width: 100%;
+        order: 1; /* Move it to the top if needed */
+    }
+
+    /* Let the desktop grid fill the available space */
+    #desktop-grid {
+        min-width: 100%;
+        grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    }
+
+    /* Hide decorative elements if they take up too much room */
+    #sugar {
+        display: none; 
+    }
+
+    /* Shrink large fonts for smaller screens */
+    .bpm-counter {
+        font-size: 1.5rem;
+    }
+
+    /* Adjust padding for smaller screens */
+    body {
+        gap: 5px;
+    }
+}
