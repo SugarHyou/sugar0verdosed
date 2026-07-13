@@ -11,7 +11,7 @@ function setSugarMode(mode) {
 
     switch(sugarMode) {
         case 'busy':
-            avatarImg.src = "/assets/art/SUGAR_BUSY.png";
+            avatarImg.src = "/assets/art/Empty-(Jul-12-2026).png";
             dialogueBox.innerText = "Sugar is busy right now...";
             optionsBox.innerHTML = "";
             break;
@@ -51,28 +51,25 @@ function renderDefaultOptions() {
 async function loadSiteData() {
     try {
         const res = await fetch('https://raw.githubusercontent.com/SugarHyou/sugar0verdosed/main/output/journal.json', {
-    cache: 'no-store'
-});
-const data = await res.json();
+            cache: 'no-store'
+        });
+        const data = await res.json();
         
-        const dateContainer = document.getElementById('blog-date');
-        const contentContainer = document.getElementById('blog-body');
+        const dateEl = document.getElementById('blog-date');
+        const titleEl = document.getElementById('blog-title');
+        const contentEl = document.getElementById('blog-body');
         
-        if (contentContainer && data.posts && data.posts.length > 0) {
+        if (contentEl && data.posts && data.posts.length > 0) {
             const latestPost = data.posts[0];
 
-            if (contentContainer.innerText !== latestPost.content) {
-                contentContainer.classList.add('blog-update-anim');
-                dateContainer.innerText = latestPost.date;
-                contentContainer.innerText = latestPost.content;
+            if (contentEl.innerText !== latestPost.content) {
+                contentEl.classList.add('blog-update-anim');
                 
-                setTimeout(() => contentContainer.classList.remove('blog-update-anim'), 5000);
-            }
-
-            const lastSeenPostDate = localStorage.getItem('last_seen_post_date');
-            if (lastSeenPostDate !== latestPost.date) {
-                triggerBlogAnimation();
-                localStorage.setItem('last_seen_post_date', latestPost.date);
+                dateEl.innerText = latestPost.date;
+                titleEl.innerText = latestPost.title;
+                contentEl.innerText = latestPost.content;
+                
+                setTimeout(() => contentEl.classList.remove('blog-update-anim'), 5000);
             }
         }
     } catch (e) {
@@ -256,9 +253,7 @@ function triggerBlogAnimation() {
     const chatWin = document.getElementById('window-chat');
     if (chatWin) {
         chatWin.classList.remove('hidden');
-        // Set the mode to blogging
         setSugarMode('blogging');
-        // Optional: Play a sound
         playOpen(); 
     }
 }
